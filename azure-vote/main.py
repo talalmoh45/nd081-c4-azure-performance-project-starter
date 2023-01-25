@@ -24,10 +24,10 @@ from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 
 # Logging
 logger = logging.getLogger(__name__) # TODO: Setup logger
-handler = AzureLogHandler(connection_string='InstrumentationKey=InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/')
+handler = AzureLogHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'))
 logger.setLevel(logging.INFO)
 
 # Metrics
@@ -35,7 +35,7 @@ stats = stats_module.stats
 view_manager = stats.view_manager
 exporter = metrics_exporter.new_metrics_exporter(  # TODO: Setup exporter
 enable_standard_metrics=True,
-connection_string='InstrumentationKey=InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'
+connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'
 )
 view_manager.register_exporter(exporter)
 
@@ -43,7 +43,7 @@ view_manager.register_exporter(exporter)
 tracer = Tracer(
  exporter=AzureExporter(
 
- connection_string='InstrumentationKey=InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'),
+ connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'),
  sampler=ProbabilitySampler(1.0),
 ) # TODO: Setup tracer
 
@@ -52,7 +52,7 @@ app = Flask(__name__)
 # Requests
 middleware =  FlaskMiddleware(
  app,
- exporter=AzureExporter(connection_string="InstrumentationKey=InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/"),
+ exporter=AzureExporter(connection_string="InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/"),
  sampler=ProbabilitySampler(rate=1.0)
 )# TODO: Setup flask middleware
 
