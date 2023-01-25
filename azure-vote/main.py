@@ -24,10 +24,10 @@ from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 
 # Logging
 logger = logging.getLogger(__name__) # TODO: Setup logger
-handler = AzureLogHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/')
+handler = AzureLogHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45'))
 logger.setLevel(logging.INFO)
 
 # Metrics
@@ -35,7 +35,7 @@ stats = stats_module.stats
 view_manager = stats.view_manager
 exporter = metrics_exporter.new_metrics_exporter(  # TODO: Setup exporter
 enable_standard_metrics=True,
-connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'
+connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45'
 )
 view_manager.register_exporter(exporter)
 
@@ -43,7 +43,7 @@ view_manager.register_exporter(exporter)
 tracer = Tracer(
  exporter=AzureExporter(
 
- connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/'),
+ connection_string='InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45'),
  sampler=ProbabilitySampler(1.0),
 ) # TODO: Setup tracer
 
@@ -52,7 +52,7 @@ app = Flask(__name__)
 # Requests
 middleware =  FlaskMiddleware(
  app,
- exporter=AzureExporter(connection_string="InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45;IngestionEndpoint=https://koreacentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://koreacentral.livediagnostics.monitor.azure.com/"),
+ exporter=AzureExporter(connection_string="InstrumentationKey=c212d73a-c1c3-444d-ab18-0731de0b5b45"),
  sampler=ProbabilitySampler(rate=1.0)
 )# TODO: Setup flask middleware
 
@@ -92,9 +92,9 @@ def index():
 
         # Get current values
         vote1 = r.get(button1).decode('utf-8')
-        tracer.span(name="cat vote")    # TODO: use tracer object to trace cat vote
+        tracer.span(name="CatsVote")    # TODO: use tracer object to trace cat vote
         vote2 = r.get(button2).decode('utf-8')
-        tracer.span(name="dog vote")    # TODO: use tracer object to trace dog vote
+        tracer.span(name="DogsVote")    # TODO: use tracer object to trace dog vote
 
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
@@ -109,11 +109,11 @@ def index():
             vote1 = r.get(button1).decode('utf-8')
             properties = {'custom_dimensions': {'Cats Vote': vote1}}
             # TODO: use logger object to log cat vote
-            logger.info('Cats')
+            logger.info('Cats', extra=properties)
             vote2 = r.get(button2).decode('utf-8')
             properties = {'custom_dimensions': {'Dogs Vote': vote2}}
             # TODO: use logger object to log dog vote
-            logger.info('Dogs')
+            logger.info('Dogs', extra=properties)
             return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
 
         else:
