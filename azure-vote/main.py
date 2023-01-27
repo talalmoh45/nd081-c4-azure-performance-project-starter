@@ -92,9 +92,11 @@ def index():
 
         # Get current values
         vote1 = r.get(button1).decode('utf-8')
-        tracer.span(name="CatsVote")    # TODO: use tracer object to trace cat vote
+        with tracer.span(name="CatsVote") as span:
+            print('Cats Vote')   # TODO: use tracer object to trace cat vote
         vote2 = r.get(button2).decode('utf-8')
-        tracer.span(name="DogsVote")    # TODO: use tracer object to trace dog vote
+        with tracer.span(name="DogsVote") as span:
+            print('Dogs Vote')   # TODO: use tracer object to trace dog vote
 
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
